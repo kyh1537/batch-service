@@ -11,8 +11,10 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -62,9 +64,12 @@ public class ExchangeTask implements Tasklet {
 			.encode()
 			.toUriString();
 
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		ResponseEntity<List<KoreaEximDto>> resApi =
-			this.restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<>() {
-			});
+			this.restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers),
+				new ParameterizedTypeReference<>() {});
 
 		if (resApi.getStatusCode() != HttpStatus.OK || ObjectUtils.isEmpty(resApi.getBody())) {
 			log.warn("KoreaExim Exchange Rate API ERROR. Status[{}][URL : {}]", resApi.getStatusCode(), url);

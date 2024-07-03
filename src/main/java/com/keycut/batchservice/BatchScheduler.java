@@ -20,15 +20,7 @@ public class BatchScheduler {
 	private final JobLauncher jobLauncher;
 	private final JobRegistry jobRegistry;
 
-	// @Bean
-	// public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
-	// 	JobRegistryBeanPostProcessor jobProcessor = new JobRegistryBeanPostProcessor();
-	// 	jobProcessor.setJobRegistry(jobRegistry);
-	// 	return jobProcessor;
-	// }
-
-	// @Scheduled(cron = "0 0 0 * * *")
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(cron = "0 0 0 * * *")
 	public void runJob() {
 		try {
 			Job job = jobRegistry.getJob("exchangeJob");
